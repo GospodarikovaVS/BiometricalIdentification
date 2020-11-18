@@ -17,13 +17,14 @@ namespace BiometricalIdentify
         private double speedsMathExpSqrt;
         private double speedsDispersion;
 
-        //5
-        private List<int> inputKeyOverlays;
+        //3
+        private List<List<long>> timesWithoutHold;
 
         //4
         private List<List<long>> holdingTimes;
-        //3
-        private List<List<long>> timesWithoutHold;
+
+        //5
+        private List<List<int>> inputKeyOverlays;
 
         public PassingStatistic()
         {
@@ -33,7 +34,7 @@ namespace BiometricalIdentify
             speedsMathExp = 0.0;
             speedsMathExpSqrt = 0.0;
             speedsDispersion = 0.0;
-            inputKeyOverlays = new List<int>();
+            inputKeyOverlays = new List<List<int>>();
             holdingTimes = new List<List<long>>();
             timesWithoutHold = new List<List<long>>();
         }
@@ -42,22 +43,26 @@ namespace BiometricalIdentify
         {
             tryingAmount++;
         }
-        
-        public void increaseInputTime(long time) {
-            if (inputTimes.Count < tryingAmount) {
+
+        public void increaseInputTime(long time)
+        {
+            if (inputTimes.Count < tryingAmount)
+            {
                 inputTimes.Add(0);
             }
             inputTimes[tryingAmount] += time;
         }
 
-        public void updateInputSpeed(int passCount) {
+        public void updateInputSpeed(int passCount)
+        {
             inputSpeeds.Add((double)passCount * 1000 / (double)inputTimes[inputSpeeds.Count]);
             updateMathExpAndDispersion();
         }
 
-        private void updateMathExpAndDispersion() {
-            speedsMathExp = (inputSpeeds.Last() + speedsMathExp * (inputSpeeds.Count()-1)) / (inputSpeeds.Count());
-            speedsMathExpSqrt = (inputSpeeds.Last()* inputSpeeds.Last() + speedsMathExpSqrt * (inputSpeeds.Count()-1)) / (inputSpeeds.Count());
+        private void updateMathExpAndDispersion()
+        {
+            speedsMathExp = (inputSpeeds.Last() + speedsMathExp * (inputSpeeds.Count() - 1)) / (inputSpeeds.Count());
+            speedsMathExpSqrt = (inputSpeeds.Last() * inputSpeeds.Last() + speedsMathExpSqrt * (inputSpeeds.Count() - 1)) / (inputSpeeds.Count());
             speedsDispersion = speedsMathExpSqrt - speedsMathExp * speedsMathExp;
         }
         public void addInputSpeedTime(long time)
@@ -128,38 +133,65 @@ namespace BiometricalIdentify
 
         public void nextInputOverlays()
         {
-            inputKeyOverlays.Add(0);
+            inputKeyOverlays.Add(new List<int> { 0, 0, 0 });
         }
 
-        public void increaseKeyOverlays() {
-            inputKeyOverlays[tryingAmount]++;
-        }
-
-        public void addKeyOverlays(int amountOverlays)
+        public void increaseKeyOverlaysFstType()
         {
-            inputKeyOverlays[tryingAmount] += amountOverlays;
+            inputKeyOverlays[tryingAmount][0]++;
         }
 
-        public int getLastKeyOverlays()
+        public void increaseKeyOverlaysSndType()
+        {
+            inputKeyOverlays[tryingAmount][1]++;
+        }
+
+        public void increaseKeyOverlaysThrdType()
+        {
+            inputKeyOverlays[tryingAmount][2]++;
+        }
+
+        public void addKeyOverlays(List<int> amountOverlays)
+        {
+            if (inputKeyOverlays.Count - 1 < tryingAmount)
+                nextInputOverlays();
+            inputKeyOverlays[tryingAmount][0] += amountOverlays[0];
+            inputKeyOverlays[tryingAmount][1] += amountOverlays[1];
+            inputKeyOverlays[tryingAmount][2] += amountOverlays[2];
+        }
+
+        public List<int> getLastKeyOverlays()
         {
             return inputKeyOverlays[tryingAmount - 1];
         }
 
-        public List<int> getKeyOverlays()
+        public int getLastKeyOverlaysFstType()
+        {
+            return inputKeyOverlays[tryingAmount - 1][0];
+        }
+
+        public int getLastKeyOverlaysSndType()
+        {
+            return inputKeyOverlays[tryingAmount - 1][1];
+        }
+
+        public int getLastKeyOverlaysThrdType()
+        {
+            return inputKeyOverlays[tryingAmount - 1][2];
+        }
+
+        public List<List<int>> getKeyOverlays()
         {
             return inputKeyOverlays;
         }
 
-        public int[] getKeyOverlaysAsArray()
+        public double getDispersion()
         {
-            return inputKeyOverlays.ToArray();
-        }
-
-        public double getDispersion() {
             return speedsDispersion;
         }
 
-        public double getMathExp() {
+        public double getMathExp()
+        {
             return speedsMathExp;
         }
 

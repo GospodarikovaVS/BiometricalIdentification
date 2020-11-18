@@ -101,11 +101,7 @@ namespace BiometricalIdentify
             passingStatistic.addInputSpeedTime(time);
         }
 
-        public void addKeyOverlay() {
-            passingStatistic.increaseKeyOverlays();
-        }
-
-        public void addKeyOverlay(int overlays)
+        public void addKeyOverlays(List<int> overlays)
         {
             passingStatistic.addKeyOverlays(overlays);
         }
@@ -128,8 +124,24 @@ namespace BiometricalIdentify
             return passingStatistic.getMathExp();
         }
 
-        public int getLastKeyOverlays() {
+        public List<int> getLastKeyOverlays()
+        {
             return passingStatistic.getLastKeyOverlays();
+        }
+
+        public int getLastKeyOverlaysFstType()
+        {
+            return passingStatistic.getLastKeyOverlaysFstType();
+        }
+
+        public int getLastKeyOverlaysSndType()
+        {
+            return passingStatistic.getLastKeyOverlaysSndType();
+        }
+
+        public int getLastKeyOverlaysThrdType()
+        {
+            return passingStatistic.getLastKeyOverlaysThrdType();
         }
     }
 }

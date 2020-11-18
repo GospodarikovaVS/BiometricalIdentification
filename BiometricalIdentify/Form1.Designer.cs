@@ -184,7 +184,7 @@
             this.ViewStatGroup.Controls.Add(this.InputSpeedStatBox);
             this.ViewStatGroup.Location = new System.Drawing.Point(10, 200);
             this.ViewStatGroup.Name = "ViewStatGroup";
-            this.ViewStatGroup.Size = new System.Drawing.Size(642, 429);
+            this.ViewStatGroup.Size = new System.Drawing.Size(642, 485);
             this.ViewStatGroup.TabIndex = 6;
             this.ViewStatGroup.TabStop = false;
             this.ViewStatGroup.Text = "ViewStatistic";
@@ -197,7 +197,7 @@
             this.OtherInfoBox.Controls.Add(this.KeyOverlayBox);
             this.OtherInfoBox.Location = new System.Drawing.Point(6, 317);
             this.OtherInfoBox.Name = "OtherInfoBox";
-            this.OtherInfoBox.Size = new System.Drawing.Size(629, 106);
+            this.OtherInfoBox.Size = new System.Drawing.Size(629, 162);
             this.OtherInfoBox.TabIndex = 4;
             this.OtherInfoBox.TabStop = false;
             this.OtherInfoBox.Text = "OtherInfo";
@@ -216,7 +216,7 @@
             this.HoldTimeBox.Location = new System.Drawing.Point(331, 51);
             this.HoldTimeBox.Multiline = true;
             this.HoldTimeBox.Name = "HoldTimeBox";
-            this.HoldTimeBox.Size = new System.Drawing.Size(280, 49);
+            this.HoldTimeBox.Size = new System.Drawing.Size(280, 105);
             this.HoldTimeBox.TabIndex = 4;
             // 
             // KeyOverlaysLabel
@@ -233,7 +233,7 @@
             this.KeyOverlayBox.Location = new System.Drawing.Point(16, 51);
             this.KeyOverlayBox.Multiline = true;
             this.KeyOverlayBox.Name = "KeyOverlayBox";
-            this.KeyOverlayBox.Size = new System.Drawing.Size(279, 49);
+            this.KeyOverlayBox.Size = new System.Drawing.Size(279, 105);
             this.KeyOverlayBox.TabIndex = 2;
             // 
             // InputDynamicsStatBox
@@ -293,7 +293,7 @@
             this.AutoScaleDimensions = new System.Drawing.SizeF(9F, 20F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.SystemColors.ControlLightLight;
-            this.ClientSize = new System.Drawing.Size(660, 641);
+            this.ClientSize = new System.Drawing.Size(660, 697);
             this.Controls.Add(this.ViewStatGroup);
             this.Controls.Add(this.StatGroup);
             this.Controls.Add(this.PassGroup);

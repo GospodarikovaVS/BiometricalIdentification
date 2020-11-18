@@ -49,6 +49,8 @@
   <ItemGroup>
     <Compile Include="BL\PassChecker.cs" />
     <Compile Include="BL\PassingStatistic.cs" />
+    <Compile Include="BL\PushingKey.cs" />
+    <Compile Include="BL\PushingKeyQueue.cs" />
     <Compile Include="Form1.cs">
       <SubType>Form</SubType>
     </Compile>
