@@ -7,4 +7,4 @@
 * Время удержания каждой клавиши
 
 Отчёты по лабораторным работам:
-* [Лабораторная работа 1](https://github.com/GospodarikovaVS/CPPLabs/tree/master/docs/Господарикова_2.1_Вариант-1.pdf)
+* [Лабораторная работа 1](https://github.com/GospodarikovaVS/BiometricalIdentification/blob/master/docs/Господарикова_2.1_Вариант-1.pdf)
