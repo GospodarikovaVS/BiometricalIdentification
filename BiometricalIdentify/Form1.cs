@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.Windows.Forms;
 using System.Windows.Forms.DataVisualization.Charting;
 using System.Diagnostics;
+using System.Data;
+using MySql.Data.MySqlClient;
 
 namespace BiometricalIdentify
 {
@@ -21,6 +23,25 @@ namespace BiometricalIdentify
 
         private void Form1_Load(object sender, EventArgs e)
         {
+            String login = Microsoft.VisualBasic.Interaction.InputBox("Input your login:");
+            DBContext context = new DBContext();
+            DataTable table = new DataTable();
+            MySqlDataAdapter adapter = new MySqlDataAdapter();
+            MySqlCommand command = new MySqlCommand("SELECT * FROM `users` WHERE `login`=@login");
+            command.Parameters.Add("@login", MySqlDbType.VarChar).Value = login;
+            adapter.SelectCommand = command;
+            adapter.Fill(table);
+            if (table.Rows.Count == 0) {
+                string password = Microsoft.VisualBasic.Interaction.InputBox("Input your password:");
+                MySqlCommand insertLoginCommand = new MySqlCommand("insert into 'users'('login') values (@login)");
+                insertLoginCommand.Parameters.Add("@login", MySqlDbType.VarChar).Value = login;
+                adapter.InsertCommand = insertLoginCommand;
+                adapter.Update(table);
+                adapter.SelectCommand = command;
+                adapter.Fill(table);
+                MySqlCommand insertPasswordCommand = new MySqlCommand("insert into `passwords`(`id`, `text`, `difficulty`, `user_id`) values (@login)");
+                command.Parameters.Add("@login", MySqlDbType.VarChar).Value = login;
+            }
             ComStatBox.ScrollBars = ScrollBars.Vertical;
             HoldTimeBox.ScrollBars = ScrollBars.Vertical;
             KeyOverlayBox.ScrollBars = ScrollBars.Vertical;
