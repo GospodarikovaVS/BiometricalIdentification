@@ -6,5 +6,9 @@
 * Количество наложений
 * Время удержания каждой клавиши
 
-Отчёты по лабораторным работам:
+## Отчёты по лабораторным работам:
 * [Лабораторная работа 1](https://github.com/GospodarikovaVS/BiometricalIdentification/blob/master/docs/Господарикова_2.1.pdf)
+
+## Ветки, содержащие последнюю версию для лабораторной работы:
+* [Лабораторная работа 1](https://github.com/GospodarikovaVS/BiometricalIdentification/tree/v.1.0.0)
+* [Лабораторная работа 2](https://github.com/GospodarikovaVS/BiometricalIdentification/tree/v.2.0.0)
