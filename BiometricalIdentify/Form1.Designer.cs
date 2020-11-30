@@ -37,6 +37,8 @@
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(LogInForm));
             this.PasswordInputBox = new System.Windows.Forms.TextBox();
             this.PassPanel = new System.Windows.Forms.Panel();
+            this.LabLogin = new System.Windows.Forms.Label();
+            this.LoginInputBox = new System.Windows.Forms.TextBox();
             this.label1 = new System.Windows.Forms.Label();
             this.LogInButton = new System.Windows.Forms.Button();
             this.LabPass = new System.Windows.Forms.Label();
@@ -56,6 +58,8 @@
             this.InputDynamicsChart = new System.Windows.Forms.DataVisualization.Charting.Chart();
             this.InputSpeedStatBox = new System.Windows.Forms.GroupBox();
             this.InputSpeedChart = new System.Windows.Forms.DataVisualization.Charting.Chart();
+            this.RegistrationButton = new System.Windows.Forms.Button();
+            this.VectorOutputBox = new System.Windows.Forms.Button();
             this.PassPanel.SuspendLayout();
             this.ControlStatsPanel.SuspendLayout();
             this.PassGroup.SuspendLayout();
@@ -70,7 +74,7 @@
             // 
             // PasswordInputBox
             // 
-            this.PasswordInputBox.Location = new System.Drawing.Point(15, 41);
+            this.PasswordInputBox.Location = new System.Drawing.Point(15, 78);
             this.PasswordInputBox.Name = "PasswordInputBox";
             this.PasswordInputBox.Size = new System.Drawing.Size(280, 27);
             this.PasswordInputBox.TabIndex = 0;
@@ -79,6 +83,8 @@
             // 
             // PassPanel
             // 
+            this.PassPanel.Controls.Add(this.LabLogin);
+            this.PassPanel.Controls.Add(this.LoginInputBox);
             this.PassPanel.Controls.Add(this.label1);
             this.PassPanel.Controls.Add(this.LogInButton);
             this.PassPanel.Controls.Add(this.LabPass);
@@ -88,12 +94,28 @@
             this.PassPanel.Size = new System.Drawing.Size(301, 153);
             this.PassPanel.TabIndex = 1;
             // 
+            // LabLogin
+            // 
+            this.LabLogin.AutoSize = true;
+            this.LabLogin.Location = new System.Drawing.Point(12, 3);
+            this.LabLogin.Name = "LabLogin";
+            this.LabLogin.Size = new System.Drawing.Size(53, 20);
+            this.LabLogin.TabIndex = 5;
+            this.LabLogin.Text = "Login:";
+            // 
+            // LoginInputBox
+            // 
+            this.LoginInputBox.Location = new System.Drawing.Point(15, 26);
+            this.LoginInputBox.Name = "LoginInputBox";
+            this.LoginInputBox.Size = new System.Drawing.Size(280, 27);
+            this.LoginInputBox.TabIndex = 4;
+            // 
             // label1
             // 
             this.label1.AutoSize = true;
             this.label1.Font = new System.Drawing.Font("Cambria", 8.5F);
             this.label1.ForeColor = System.Drawing.SystemColors.ControlDarkDark;
-            this.label1.Location = new System.Drawing.Point(13, 81);
+            this.label1.Location = new System.Drawing.Point(16, 108);
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(83, 34);
             this.label1.TabIndex = 3;
@@ -101,7 +123,7 @@
             // 
             // LogInButton
             // 
-            this.LogInButton.Location = new System.Drawing.Point(128, 84);
+            this.LogInButton.Location = new System.Drawing.Point(128, 112);
             this.LogInButton.Name = "LogInButton";
             this.LogInButton.Size = new System.Drawing.Size(167, 30);
             this.LogInButton.TabIndex = 2;
@@ -112,7 +134,7 @@
             // LabPass
             // 
             this.LabPass.AutoSize = true;
-            this.LabPass.Location = new System.Drawing.Point(12, 9);
+            this.LabPass.Location = new System.Drawing.Point(12, 55);
             this.LabPass.Name = "LabPass";
             this.LabPass.Size = new System.Drawing.Size(83, 20);
             this.LabPass.TabIndex = 1;
@@ -288,12 +310,34 @@
             this.InputSpeedChart.TabIndex = 0;
             this.InputSpeedChart.Text = "InputSpeedChar";
             // 
+            // RegistrationButton
+            // 
+            this.RegistrationButton.Location = new System.Drawing.Point(10, 691);
+            this.RegistrationButton.Name = "RegistrationButton";
+            this.RegistrationButton.Size = new System.Drawing.Size(642, 30);
+            this.RegistrationButton.TabIndex = 4;
+            this.RegistrationButton.Text = "Registration";
+            this.RegistrationButton.UseVisualStyleBackColor = true;
+            this.RegistrationButton.Click += new System.EventHandler(this.RegistrationButton_Click);
+            // 
+            // VectorOutputBox
+            // 
+            this.VectorOutputBox.Location = new System.Drawing.Point(10, 727);
+            this.VectorOutputBox.Name = "VectorOutputBox";
+            this.VectorOutputBox.Size = new System.Drawing.Size(642, 30);
+            this.VectorOutputBox.TabIndex = 7;
+            this.VectorOutputBox.Text = "Show vector";
+            this.VectorOutputBox.UseVisualStyleBackColor = true;
+            this.VectorOutputBox.Click += new System.EventHandler(this.VectorOutputBox_Click);
+            // 
             // LogInForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(9F, 20F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.SystemColors.ControlLightLight;
-            this.ClientSize = new System.Drawing.Size(660, 697);
+            this.ClientSize = new System.Drawing.Size(660, 766);
+            this.Controls.Add(this.VectorOutputBox);
+            this.Controls.Add(this.RegistrationButton);
             this.Controls.Add(this.ViewStatGroup);
             this.Controls.Add(this.StatGroup);
             this.Controls.Add(this.PassGroup);
@@ -343,6 +387,10 @@
         private System.Windows.Forms.Label KeyOverlaysLabel;
         private System.Windows.Forms.TextBox KeyOverlayBox;
         private System.Windows.Forms.Label label1;
+        private System.Windows.Forms.Button RegistrationButton;
+        private System.Windows.Forms.Label LabLogin;
+        private System.Windows.Forms.TextBox LoginInputBox;
+        private System.Windows.Forms.Button VectorOutputBox;
     }
 }
 

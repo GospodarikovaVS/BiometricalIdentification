@@ -143,5 +143,10 @@ namespace BiometricalIdentify
         {
             return passingStatistic.getLastKeyOverlaysThrdType();
         }
+
+        public int getPassLength()
+        {
+            return canonPass.Length;
+        }
     }
 }

@@ -13,8 +13,11 @@ namespace BiometricalIdentify
         private PassChecker passChecker;
         private PushingKeyQueue pushingKeyQueue;
         private Stopwatch commonStopwatch;
+        static Random r = new Random();
         Series inputSpeedsSeries;
         Series inputDinamicsSeries;
+        private List<double> speeds = new List<double>();
+        private List<double> timesWithoutPressing = new List<double>();
 
         public LogInForm()
         {
@@ -23,25 +26,6 @@ namespace BiometricalIdentify
 
         private void Form1_Load(object sender, EventArgs e)
         {
-            String login = Microsoft.VisualBasic.Interaction.InputBox("Input your login:");
-            DBContext context = new DBContext();
-            DataTable table = new DataTable();
-            MySqlDataAdapter adapter = new MySqlDataAdapter();
-            MySqlCommand command = new MySqlCommand("SELECT * FROM `users` WHERE `login`=@login");
-            command.Parameters.Add("@login", MySqlDbType.VarChar).Value = login;
-            adapter.SelectCommand = command;
-            adapter.Fill(table);
-            if (table.Rows.Count == 0) {
-                string password = Microsoft.VisualBasic.Interaction.InputBox("Input your password:");
-                MySqlCommand insertLoginCommand = new MySqlCommand("insert into 'users'('login') values (@login)");
-                insertLoginCommand.Parameters.Add("@login", MySqlDbType.VarChar).Value = login;
-                adapter.InsertCommand = insertLoginCommand;
-                adapter.Update(table);
-                adapter.SelectCommand = command;
-                adapter.Fill(table);
-                MySqlCommand insertPasswordCommand = new MySqlCommand("insert into `passwords`(`id`, `text`, `difficulty`, `user_id`) values (@login)");
-                command.Parameters.Add("@login", MySqlDbType.VarChar).Value = login;
-            }
             ComStatBox.ScrollBars = ScrollBars.Vertical;
             HoldTimeBox.ScrollBars = ScrollBars.Vertical;
             KeyOverlayBox.ScrollBars = ScrollBars.Vertical;
@@ -106,28 +90,28 @@ namespace BiometricalIdentify
                 }
             }
 
+            speeds = pushingKeyQueue.holdingTimes;
+            timesWithoutPressing = pushingKeyQueue.overlaysTimes;
             pushingKeyQueue = new PushingKeyQueue();
         }
 
         private void RestartStatButton_Click(object sender, EventArgs e)
         {
+            RestartForm();
+        }
+
+        private void RestartForm() {
             ComStatBox.ScrollBars = ScrollBars.Vertical;
             HoldTimeBox.ScrollBars = ScrollBars.Vertical;
             passChecker = new PassChecker();
             pushingKeyQueue = new PushingKeyQueue();
             commonStopwatch = new Stopwatch();
             InputSpeedChart.Series.Clear();
-            InputSpeedChart.Titles.Add("InputSpeeds");
-            InputSpeedChart.Palette = ChartColorPalette.Berry;
-            InputSpeedChart.Series.Clear();
             inputSpeedsSeries = InputSpeedChart.Series.Add("symbols\nper sec");
             inputSpeedsSeries.Points.Clear();
-            InputDynamicsChart.Titles.Add("Dispersion of InputSpeeds");
-            InputDynamicsChart.Palette = ChartColorPalette.Berry;
             InputDynamicsChart.Series.Clear();
             inputDinamicsSeries = InputDynamicsChart.Series.Add("symbols\nper sec");
             inputDinamicsSeries.ChartType = SeriesChartType.Spline;
-
             inputDinamicsSeries.Points.Clear();
         }
 
@@ -164,5 +148,47 @@ namespace BiometricalIdentify
             }
         }
 
+        private void RegistrationButton_Click(object sender, EventArgs e)
+        {
+            User user = new User();
+            while (user.login == null || user.login == "")
+            {
+                string login = Microsoft.VisualBasic.Interaction.InputBox("Input your login:");
+                user.login = login;
+                if (!user.checkForUnique()) {
+                    MessageBox.Show("This login already registered");
+                    user.login = "";
+                }
+            }
+            while (user.password == null || user.password == "")
+            {
+                string password = Microsoft.VisualBasic.Interaction.InputBox("Input your password:");
+                string passwordConfirm = Microsoft.VisualBasic.Interaction.InputBox("Confirm your password:");
+                if (password == passwordConfirm)
+                {
+                    user.password = password;
+                    user.registrateUser();
+                    MessageBox.Show("Registration successfully");
+                    RestartForm();
+                    LoginInputBox.Text = user.login;
+                    LoginInputBox.Enabled = false;
+                }
+                else
+                {
+                    MessageBox.Show("Passwords is not equal");
+                }
+            }
+        }
+
+        private void VectorOutputBox_Click(object sender, EventArgs e)
+        { 
+            var vector = UserVector.GetUserVector(speeds.Count, speeds, timesWithoutPressing);
+            String userVector = "";
+            foreach (double item in vector)
+            {
+                userVector += Math.Round(item, 2) + "; ";
+            }
+            MessageBox.Show(userVector);
+        }
     }
 }

@@ -21,11 +21,11 @@ namespace BiometricalIdentify
         {
             if (connection.State == System.Data.ConnectionState.Open)
             {
-                connection.Open();
+                connection.Close();
             }
         }
 
-        private MySqlConnection getConnection() {
+        public MySqlConnection getConnection() {
             return connection;
         }
     }

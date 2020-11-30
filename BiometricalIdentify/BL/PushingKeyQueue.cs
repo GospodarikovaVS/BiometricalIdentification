@@ -10,13 +10,19 @@ namespace BiometricalIdentify
     class PushingKeyQueue
     {
         private List<PushingKey> keysStopwatches;
+        private List<Stopwatch> overlays;
         private int amountOfOverlaysFstType = 0;
         private int amountOfOverlaysScndType = 0;
         private int amountOfOverlaysThrdType = 0;
+        public List<double> holdingTimes;
+        public List<double> overlaysTimes;
 
         public PushingKeyQueue()
         {
             keysStopwatches = new List<PushingKey>();
+            overlays = new List<Stopwatch>();
+            holdingTimes = new List<double>();
+            overlaysTimes = new List<double>();
         }
 
         public void addNewPushingKey(int keyValue)
@@ -24,8 +30,22 @@ namespace BiometricalIdentify
             Stopwatch stpwtch = new Stopwatch();
             stpwtch.Start();
             keysStopwatches.Add(new PushingKey(keyValue, stpwtch));
-            if (keysStopwatches.Count > 1) {
+            if (keysStopwatches.Count > 1)
+            {
+                Stopwatch overlay = new Stopwatch();
+                overlay.Start();
+                overlays.Add(overlay);
                 amountOfOverlaysFstType++;
+            }
+            else
+            {
+                if (overlays.Count > 0)
+                {
+                    overlays[0].Stop();
+                    double d = Convert.ToDouble(overlays[0].ElapsedMilliseconds) / 10;
+                    overlaysTimes.Add(d);
+                    overlays.RemoveAt(0);
+                }
             }
         }
 
@@ -45,14 +65,27 @@ namespace BiometricalIdentify
             if (pushingKey != null)
             {
                 int idx = keysStopwatches.IndexOf(pushingKey);
-                if(keysStopwatches.Count > 1)
+                if (keysStopwatches.Count > 1)
                 {
+                    if (overlays.Count > 0)
+                    {
+                        overlays[0].Stop();
+                        double d = -Convert.ToDouble(overlays[0].ElapsedMilliseconds) / 10;
+                        overlaysTimes.Add(d);
+                        overlays.RemoveAt(0);
+                    }
                     if (idx == 0)
                         amountOfOverlaysScndType++;
                     else amountOfOverlaysThrdType++;
                 }
+                else {
+                    Stopwatch overlay = new Stopwatch();
+                    overlay.Start();
+                    overlays.Add(overlay);
+                }
                 keysStopwatches.RemoveAt(idx);
             }
+            holdingTimes.Add(Convert.ToDouble(time) / 10);
             return time;
         }
 
@@ -78,6 +111,7 @@ namespace BiometricalIdentify
                 }
                 keysStopwatches.RemoveAt(idx);
             }
+            holdingTimes.Add(Convert.ToDouble(pushingKey.getTime()) / 10);
             return pushingKey;
         }
 
