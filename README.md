@@ -11,4 +11,4 @@
 
 ## Ветки, содержащие последнюю версию для лабораторной работы:
 * [Лабораторная работа 1](https://github.com/GospodarikovaVS/BiometricalIdentification/tree/v.1.0.0)
-* [Лабораторная работа 2](https://github.com/GospodarikovaVS/BiometricalIdentification/tree/v.2.0.0)
+* [Лабораторная работа 2](https://github.com/GospodarikovaVS/BiometricalIdentification/tree/v.2.0.1)
