@@ -52,12 +52,15 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="BL\DifficultyChecker.cs" />
     <Compile Include="BL\PassChecker.cs" />
     <Compile Include="BL\PassingStatistic.cs" />
     <Compile Include="BL\PushingKey.cs" />
     <Compile Include="BL\PushingKeyQueue.cs" />
     <Compile Include="BL\StepFunction.cs" />
     <Compile Include="DB\DBContext.cs" />
+    <Compile Include="DB\Pushing.cs" />
+    <Compile Include="DB\Stat.cs" />
     <Compile Include="DB\User.cs" />
     <Compile Include="Form1.cs">
       <SubType>Form</SubType>

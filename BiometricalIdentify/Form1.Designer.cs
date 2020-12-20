@@ -44,7 +44,7 @@
             this.LabPass = new System.Windows.Forms.Label();
             this.ControlStatsPanel = new System.Windows.Forms.Panel();
             this.ComStatBox = new System.Windows.Forms.TextBox();
-            this.SaveStatButton = new System.Windows.Forms.Button();
+            this.ChangePasswordButton = new System.Windows.Forms.Button();
             this.RestartStatButton = new System.Windows.Forms.Button();
             this.PassGroup = new System.Windows.Forms.GroupBox();
             this.StatGroup = new System.Windows.Forms.GroupBox();
@@ -60,6 +60,7 @@
             this.InputSpeedChart = new System.Windows.Forms.DataVisualization.Charting.Chart();
             this.RegistrationButton = new System.Windows.Forms.Button();
             this.VectorOutputBox = new System.Windows.Forms.Button();
+            this.ShowListOfUsers = new System.Windows.Forms.Button();
             this.PassPanel.SuspendLayout();
             this.ControlStatsPanel.SuspendLayout();
             this.PassGroup.SuspendLayout();
@@ -143,7 +144,7 @@
             // ControlStatsPanel
             // 
             this.ControlStatsPanel.Controls.Add(this.ComStatBox);
-            this.ControlStatsPanel.Controls.Add(this.SaveStatButton);
+            this.ControlStatsPanel.Controls.Add(this.ChangePasswordButton);
             this.ControlStatsPanel.Controls.Add(this.RestartStatButton);
             this.ControlStatsPanel.Location = new System.Drawing.Point(6, 26);
             this.ControlStatsPanel.Name = "ControlStatsPanel";
@@ -159,15 +160,15 @@
             this.ComStatBox.Size = new System.Drawing.Size(287, 88);
             this.ComStatBox.TabIndex = 6;
             // 
-            // SaveStatButton
+            // ChangePasswordButton
             // 
-            this.SaveStatButton.Location = new System.Drawing.Point(168, 108);
-            this.SaveStatButton.Name = "SaveStatButton";
-            this.SaveStatButton.Size = new System.Drawing.Size(131, 30);
-            this.SaveStatButton.TabIndex = 5;
-            this.SaveStatButton.Text = "Save";
-            this.SaveStatButton.UseVisualStyleBackColor = true;
-            this.SaveStatButton.Click += new System.EventHandler(this.SaveStatButton_Click);
+            this.ChangePasswordButton.Location = new System.Drawing.Point(168, 108);
+            this.ChangePasswordButton.Name = "ChangePasswordButton";
+            this.ChangePasswordButton.Size = new System.Drawing.Size(131, 30);
+            this.ChangePasswordButton.TabIndex = 5;
+            this.ChangePasswordButton.Text = "Change pass";
+            this.ChangePasswordButton.UseVisualStyleBackColor = true;
+            this.ChangePasswordButton.Click += new System.EventHandler(this.SaveStatButton_Click);
             // 
             // RestartStatButton
             // 
@@ -330,12 +331,22 @@
             this.VectorOutputBox.UseVisualStyleBackColor = true;
             this.VectorOutputBox.Click += new System.EventHandler(this.VectorOutputBox_Click);
             // 
+            // ShowListOfUsers
+            // 
+            this.ShowListOfUsers.Location = new System.Drawing.Point(10, 763);
+            this.ShowListOfUsers.Name = "ShowListOfUsers";
+            this.ShowListOfUsers.Size = new System.Drawing.Size(642, 30);
+            this.ShowListOfUsers.TabIndex = 8;
+            this.ShowListOfUsers.Text = "Show all users";
+            this.ShowListOfUsers.UseVisualStyleBackColor = true;
+            // 
             // LogInForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(9F, 20F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.SystemColors.ControlLightLight;
-            this.ClientSize = new System.Drawing.Size(660, 766);
+            this.ClientSize = new System.Drawing.Size(660, 807);
+            this.Controls.Add(this.ShowListOfUsers);
             this.Controls.Add(this.VectorOutputBox);
             this.Controls.Add(this.RegistrationButton);
             this.Controls.Add(this.ViewStatGroup);
@@ -372,7 +383,7 @@
         private System.Windows.Forms.Button LogInButton;
         private System.Windows.Forms.Panel ControlStatsPanel;
         private System.Windows.Forms.TextBox ComStatBox;
-        private System.Windows.Forms.Button SaveStatButton;
+        private System.Windows.Forms.Button ChangePasswordButton;
         private System.Windows.Forms.Button RestartStatButton;
         private System.Windows.Forms.GroupBox PassGroup;
         private System.Windows.Forms.GroupBox StatGroup;
@@ -391,6 +402,7 @@
         private System.Windows.Forms.Label LabLogin;
         private System.Windows.Forms.TextBox LoginInputBox;
         private System.Windows.Forms.Button VectorOutputBox;
+        private System.Windows.Forms.Button ShowListOfUsers;
     }
 }
 

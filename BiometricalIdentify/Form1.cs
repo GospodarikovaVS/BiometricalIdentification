@@ -13,11 +13,13 @@ namespace BiometricalIdentify
         private PassChecker passChecker;
         private PushingKeyQueue pushingKeyQueue;
         private Stopwatch commonStopwatch;
-        static Random r = new Random();
+        private User user;
         Series inputSpeedsSeries;
         Series inputDinamicsSeries;
         private List<double> speeds = new List<double>();
         private List<double> timesWithoutPressing = new List<double>();
+        public List<double[]> vectors;
+        public bool writeStatsMode;
 
         public LogInForm()
         {
@@ -43,6 +45,10 @@ namespace BiometricalIdentify
             InputDynamicsChart.Series.Clear();
             inputDinamicsSeries = InputDynamicsChart.Series.Add("dispersion");
             inputDinamicsSeries.ChartType = SeriesChartType.Spline;
+            user = new User();
+            ChangePasswordButton.Enabled = false;
+            vectors = new List<double[]>();
+            writeStatsMode = false;
 
             inputDinamicsSeries.Points.Clear();
         }
@@ -57,22 +63,42 @@ namespace BiometricalIdentify
             }
 
             passChecker.addKeyOverlays(pushingKeyQueue.getKeyOverlays());
+            
+            //check for db
 
             if (PasswordInputBox.TextLength == 0) MessageBox.Show("Вы не ввели пароль");
             else {
                 byte difficulty = 0;
-                bool success = passChecker.passCheck(PasswordInputBox.Text, ref difficulty);
+                bool success = passChecker.passCheck(PasswordInputBox.Text, ref difficulty, user);
 
                 if (success)
                 {
-                    String comStatisticsText = "Difficulty of inputed password is " + difficulty.ToString() + Environment.NewLine +
-                                            "Input speed is " + passChecker.getLastInputSpeed().ToString("N2") + Environment.NewLine +
-                                            "Mathematical expectation is " + passChecker.getMathExp().ToString("N2") + Environment.NewLine +
-                                            "Dispersion is " + passChecker.getDispersion().ToString("N2") + Environment.NewLine;
+                    if (vectors.Count == 10) {
+                        writeStatsMode = false;
+                            user.updateCommonStatistics(Convert.ToSingle(passChecker.getMathExp()),
+                                                        Convert.ToSingle(passChecker.getDispersion()), 
+                                                        passChecker.getInputSpeeds(), vectors);
+                    }
+                    String comStatisticsText = "";
+                    comStatisticsText += "Difficulty of inputed password is " + difficulty.ToString() + Environment.NewLine +
+                                    "Input speed is " + passChecker.getLastInputSpeed().ToString("N2") + Environment.NewLine +
+                                    "Mathematical expectation is " + passChecker.getMathExp().ToString("N2") + Environment.NewLine +
+                                    "Dispersion is " + passChecker.getDispersion().ToString("N2") + Environment.NewLine;
+                    if (writeStatsMode)
+                    {
+                        comStatisticsText += "Now we write your statistics. Write password " + (10 - vectors.Count) + " times" + Environment.NewLine;
+                    }
                     String keyOverlaysText = "Amount of keys` overlays:" + Environment.NewLine + 
                                                 "    1st type - " + passChecker.getLastKeyOverlaysFstType() + Environment.NewLine +
                                                 "    2nd type - " + passChecker.getLastKeyOverlaysSndType() + Environment.NewLine +
                                                 "    3rd type - " + passChecker.getLastKeyOverlaysThrdType();
+                    var vector = UserVector.GetUserVector(speeds.Count, speeds, timesWithoutPressing);
+                    List<double> newVector = new List<double>();
+                    foreach (double item in vector)
+                    {
+                        newVector.Add(item);
+                    }
+                    vectors.Add(vector);
 
                     PasswordInputBox.Clear();
                     ComStatBox.Clear();
@@ -113,11 +139,22 @@ namespace BiometricalIdentify
             inputDinamicsSeries = InputDynamicsChart.Series.Add("symbols\nper sec");
             inputDinamicsSeries.ChartType = SeriesChartType.Spline;
             inputDinamicsSeries.Points.Clear();
+            vectors = new List<double[]>();
         }
 
         private void SaveStatButton_Click(object sender, EventArgs e)
         {
-
+            string newPassword = Microsoft.VisualBasic.Interaction.InputBox("Input your password:");
+            string passwordConfirm = Microsoft.VisualBasic.Interaction.InputBox("Confirm your password:");
+            if (newPassword == passwordConfirm)
+            {
+                this.user.changePassword(user.password, newPassword);
+                MessageBox.Show("Succesfuly changed");
+            }
+            else
+            {
+                MessageBox.Show("Passwords is not equal");
+            }
         }
 
         private void PasswordInputBox_KeyDown(object sender, KeyEventArgs e)
@@ -168,10 +205,14 @@ namespace BiometricalIdentify
                 {
                     user.password = password;
                     user.registrateUser();
-                    MessageBox.Show("Registration successfully");
+                    MessageBox.Show("Registration successfully. Input your password several times for statistic");
                     RestartForm();
                     LoginInputBox.Text = user.login;
                     LoginInputBox.Enabled = false;
+                    ChangePasswordButton.Enabled = true;
+                    ComStatBox.Text = "Now we write your statistics. Write password " + (10 - vectors.Count) + " times" + Environment.NewLine;
+                    writeStatsMode = true;
+                    this.user = user;
                 }
                 else
                 {
@@ -184,8 +225,10 @@ namespace BiometricalIdentify
         { 
             var vector = UserVector.GetUserVector(speeds.Count, speeds, timesWithoutPressing);
             String userVector = "";
+            List<double> newVector = new List<double>(); 
             foreach (double item in vector)
             {
+                newVector.Add(item);
                 userVector += Math.Round(item, 2) + "; ";
             }
             MessageBox.Show(userVector);

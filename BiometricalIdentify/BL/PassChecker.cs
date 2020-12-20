@@ -7,74 +7,46 @@ namespace BiometricalIdentify
     class PassChecker
     {
         private PassingStatistic passingStatistic;
-        private String canonPass;
-        private Regex formatMid = new Regex("^[a-zA-Z0-9]+$");       //4
-        private Regex formatWeak = new Regex("^[a-zA-Z]+$");         //3
-        private Regex formatWeakMid1 = new Regex("^[A-Z0-9]+$");     //2
-        private Regex formatWeakMid2 = new Regex("^[a-z0-9]+$");     //2
-        private Regex formatWeakest1 = new Regex("^[A-Z]+$");        //1
-        private Regex formatWeakest2 = new Regex("^[a-z]+$");        //1
 
         public PassChecker()
         {
             passingStatistic = new PassingStatistic();
-            canonPass = null;
         }
         public PassChecker(String pass)
         {
             passingStatistic = new PassingStatistic();
-            this.canonPass = pass;
         }
 
-        public bool passCheck(String pass)
+        public bool passCheck(String pass, User user)
         {
-            if (String.IsNullOrEmpty(canonPass))
+            if (String.IsNullOrEmpty(user.password))
             {
                 passingStatistic.increaseTryingAmount();
                 passingStatistic.updateInputSpeed(pass.Length);
-                canonPass = pass;
-                return true;
+                return user.authenticateUser(user.login, pass);
             }
-            else
+            if (!String.IsNullOrEmpty(pass))
             {
-                if (!String.IsNullOrEmpty(pass))
+                passingStatistic.increaseTryingAmount();
+                passingStatistic.updateInputSpeed(pass.Length);
+                if (pass.Equals(user.password))
                 {
-                    passingStatistic.increaseTryingAmount();
-                    passingStatistic.updateInputSpeed(pass.Length);
-                    if (pass.Equals(canonPass))
-                    {
-                        return true;
-                    }
+                    return true;
                 }
             }
             return false;
         }
 
-        public bool passCheck(String pass, ref byte difficulty)
+        public bool passCheck(String pass, ref byte difficulty, User user)
         {
-            difficulty = 0;
-            if (!String.IsNullOrEmpty(pass))
-            {
-                if (formatWeakest1.IsMatch(pass)
-                    || formatWeakest2.IsMatch(pass))
-                    difficulty += 1;
-                else if (formatWeakMid1.IsMatch(pass)
-                    || formatWeakMid2.IsMatch(pass)) difficulty += 2;
-                else if (formatWeak.IsMatch(pass)) difficulty += 3;
-                else if (formatMid.IsMatch(pass)) difficulty += 4;
-                else difficulty += 5;
+            difficulty = DifficultyChecker.difficultyCheck(pass);
 
-                if (pass.Length < 4) difficulty += 1;
-                else if (pass.Length < 8) difficulty += 3;
-                else difficulty += 5;
-            }
-
-            if (String.IsNullOrEmpty(canonPass))
+            if (String.IsNullOrEmpty(user.password))
             {
                 passingStatistic.increaseTryingAmount();
                 passingStatistic.updateInputSpeed(pass.Length);
                 passingStatistic.nextInputOverlays();
-                canonPass = pass;
+                user.password = pass;
                 return true;
             }
             else
@@ -84,7 +56,7 @@ namespace BiometricalIdentify
                     passingStatistic.increaseTryingAmount();
                     passingStatistic.updateInputSpeed(pass.Length);
                     passingStatistic.nextInputOverlays();
-                    if (pass.Equals(canonPass))
+                    if (pass.Equals(user.password))
                     {
                         return true;
                     }
@@ -142,11 +114,6 @@ namespace BiometricalIdentify
         public int getLastKeyOverlaysThrdType()
         {
             return passingStatistic.getLastKeyOverlaysThrdType();
-        }
-
-        public int getPassLength()
-        {
-            return canonPass.Length;
         }
     }
 }
