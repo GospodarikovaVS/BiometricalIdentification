@@ -69,10 +69,24 @@ namespace BiometricalIdentify
             if (PasswordInputBox.TextLength == 0) MessageBox.Show("Вы не ввели пароль");
             else {
                 byte difficulty = 0;
-                bool success = passChecker.passCheck(PasswordInputBox.Text, ref difficulty, user);
+                bool success;
+                var vector = UserVector.GetUserVector(speeds.Count, speeds, timesWithoutPressing);
+                if (user.id == null || user.id == 0)
+                {
+                    user.password = PasswordInputBox.Text;
+                    user.login = LoginInputBox.Text;
+                    success = passChecker.passCheckWithDB(PasswordInputBox.Text, ref difficulty, user, vector);
+                    MessageBox.Show("Вы вошли в систему как " + user.id + " - " + user.login);
+                }
+                else {
+                    success = passChecker.passCheck(PasswordInputBox.Text, ref difficulty, user);
+                }
+
+                //MessageBoxes
 
                 if (success)
                 {
+                    LoginInputBox.Enabled = false;
                     if (vectors.Count == 10) {
                         writeStatsMode = false;
                             user.updateCommonStatistics(Convert.ToSingle(passChecker.getMathExp()),
@@ -92,12 +106,6 @@ namespace BiometricalIdentify
                                                 "    1st type - " + passChecker.getLastKeyOverlaysFstType() + Environment.NewLine +
                                                 "    2nd type - " + passChecker.getLastKeyOverlaysSndType() + Environment.NewLine +
                                                 "    3rd type - " + passChecker.getLastKeyOverlaysThrdType();
-                    var vector = UserVector.GetUserVector(speeds.Count, speeds, timesWithoutPressing);
-                    List<double> newVector = new List<double>();
-                    foreach (double item in vector)
-                    {
-                        newVector.Add(item);
-                    }
                     vectors.Add(vector);
 
                     PasswordInputBox.Clear();
@@ -109,7 +117,7 @@ namespace BiometricalIdentify
                     inputDinamicsSeries.Points.Add(passChecker.getDispersion());
                 }
                 else {
-                    MessageBox.Show("Пароль введён неверно");
+                    MessageBox.Show("Ошибка входа в систему");
                     PasswordInputBox.Clear();
                     ComStatBox.Clear();
                     KeyOverlayBox.Clear();
@@ -140,6 +148,7 @@ namespace BiometricalIdentify
             inputDinamicsSeries.ChartType = SeriesChartType.Spline;
             inputDinamicsSeries.Points.Clear();
             vectors = new List<double[]>();
+            user = new User();
         }
 
         private void SaveStatButton_Click(object sender, EventArgs e)

@@ -198,6 +198,128 @@ namespace BiometricalIdentify
             }
         }
 
+        public void verifyUser(double[] vector) 
+        {
+            DataTable table = new DataTable();
+            MySqlDataAdapter adapter = new MySqlDataAdapter();
+            MySqlCommand command =
+                new MySqlCommand("SELECT * FROM `users` WHERE `login` = @login AND `password` = @password",
+                context.getConnection());
+            command.Parameters.Add("@login", MySqlDbType.VarChar).Value = login;
+            command.Parameters.Add("@password", MySqlDbType.VarChar).Value = password;
+            context.openConnection();
+            adapter.SelectCommand = command;
+            adapter.Fill(table);
+            context.closeConnection();
+            for (int i = 0; i < table.Rows.Count; i++)
+            {
+                object[] item = table.Rows[i].ItemArray;
+                double delta = 0.0;
+
+                string[] canonVector = (Convert.ToString(item[7])).Split(';');
+                for (int j = 0; j < vector.Length; j++)
+                {
+                    double canonEl = Convert.ToDouble(canonVector[j]);
+                    if (Math.Abs(canonEl) > 10E-3)
+                    {
+                        delta += Math.Abs(1 - (vector[j] / canonEl));
+                    }
+                    else if (Math.Abs(canonEl - vector[j]) > 10E-2)
+                    {
+                        delta += 1;
+                    }
+                }
+
+                if (delta < 0.25 * vector.Length)
+                {
+                    this.id = Convert.ToInt32(item[0]);
+                    this.login = item[1].ToString();
+                    this.password = item[2].ToString();
+                    this.difficulty = Convert.ToInt32(item[3]);
+                    if (item[4] != System.DBNull.Value)
+                    {
+                        this.math_exp = Convert.ToSingle(item[4]);
+                    }
+                    if (item[5] != System.DBNull.Value)
+                    {
+                        this.dispersion = Convert.ToSingle(item[5]);
+                    }
+                    if (item[6] != System.DBNull.Value)
+                    {
+                        this.avg_speed = Convert.ToSingle(item[6]);
+                    }
+                    if (item[7] != System.DBNull.Value)
+                    {
+                        this.avg_vector = Convert.ToString(item[7]);
+                    }
+                }
+            }
+        }
+
+        public void identifyUser(double[] vector) 
+        {
+            DataTable table = new DataTable();
+            MySqlDataAdapter adapter = new MySqlDataAdapter();
+            MySqlCommand command =
+                new MySqlCommand("SELECT * FROM `users` WHERE `password` = @password",
+                context.getConnection());
+            command.Parameters.Add("@password", MySqlDbType.VarChar).Value = password;
+            context.openConnection();
+            adapter.SelectCommand = command;
+            adapter.Fill(table);
+            context.closeConnection();
+
+            double minDelta = vector.Length;
+            int bestIdx = -1;
+            for (int i = 0; i < table.Rows.Count; i++)
+            {
+                object[] item = table.Rows[i].ItemArray;
+                double delta = 0.0;
+
+                string[] canonVector = (Convert.ToString(item[7])).Split(';');
+                for (int j = 0; j < vector.Length; j++)
+                {
+                    double canonEl = Convert.ToDouble(canonVector[j]);
+                    if (Math.Abs(canonEl) > 10E-3)
+                    {
+                        delta += Math.Abs(1 - (vector[j] / canonEl));
+                    }
+                    else if (Math.Abs(canonEl - vector[j]) > 10E-2) {
+                        delta += 1;
+                    }
+                }
+                if (delta < minDelta)
+                {
+                    minDelta = delta;
+                    bestIdx = i;
+                }
+            }
+            if (bestIdx != -1) 
+            {
+                object[] item = table.Rows[bestIdx].ItemArray;
+                this.id = Convert.ToInt32(item[0]);
+                this.login = item[1].ToString();
+                this.password = item[2].ToString();
+                this.difficulty = Convert.ToInt32(item[3]);
+                if (item[4] != System.DBNull.Value)
+                {
+                    this.math_exp = Convert.ToSingle(item[4]);
+                }
+                if (item[5] != System.DBNull.Value)
+                {
+                    this.dispersion = Convert.ToSingle(item[5]);
+                }
+                if (item[6] != System.DBNull.Value)
+                {
+                    this.avg_speed = Convert.ToSingle(item[6]);
+                }
+                if (item[7] != System.DBNull.Value)
+                {
+                    this.avg_vector = Convert.ToString(item[7]);
+                }
+            }
+        }
+
         public bool changePassword(string oldPassword, string newPassword)
         {
             if (checkForPasswordValid(oldPassword))

@@ -37,6 +37,45 @@ namespace BiometricalIdentify
             return false;
         }
 
+        public bool passCheckWithDB(String pass, ref byte difficulty, User user, double[] vector)
+        {
+            difficulty = DifficultyChecker.difficultyCheck(pass);
+            if (user.id == 0) //необходима идентификация или верификация 
+            {
+                if (user.login == "" || user.login == null) //необходима идентификация
+                {
+                    user.identifyUser(vector);
+                }
+                else //необходима верификация
+                {
+                    user.verifyUser(vector);
+                }
+            }
+            //Пользователь набирает статистику
+            if (String.IsNullOrEmpty(user.password))
+            {
+                passingStatistic.increaseTryingAmount();
+                passingStatistic.updateInputSpeed(pass.Length);
+                passingStatistic.nextInputOverlays();
+                user.password = pass;
+                return true;
+            }
+            else
+            {
+                if (!String.IsNullOrEmpty(pass))
+                {
+                    passingStatistic.increaseTryingAmount();
+                    passingStatistic.updateInputSpeed(pass.Length);
+                    passingStatistic.nextInputOverlays();
+                    if (pass.Equals(user.password))
+                    {
+                        return true;
+                    }
+                }
+            }
+            return false;
+        }
+
         public bool passCheck(String pass, ref byte difficulty, User user)
         {
             difficulty = DifficultyChecker.difficultyCheck(pass);
