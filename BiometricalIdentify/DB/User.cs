@@ -220,17 +220,10 @@ namespace BiometricalIdentify
                 for (int j = 0; j < vector.Length; j++)
                 {
                     double canonEl = Convert.ToDouble(canonVector[j]);
-                    if (Math.Abs(canonEl) > 10E-3)
-                    {
-                        delta += Math.Abs(1 - (vector[j] / canonEl));
-                    }
-                    else if (Math.Abs(canonEl - vector[j]) > 10E-2)
-                    {
-                        delta += 1;
-                    }
+                    delta += Math.Abs(vector[j] - canonEl)/10;
                 }
 
-                if (delta < 0.25 * vector.Length)
+                if (delta < (0.11 * vector.Length))
                 {
                     this.id = Convert.ToInt32(item[0]);
                     this.login = item[1].ToString();
@@ -280,13 +273,7 @@ namespace BiometricalIdentify
                 for (int j = 0; j < vector.Length; j++)
                 {
                     double canonEl = Convert.ToDouble(canonVector[j]);
-                    if (Math.Abs(canonEl) > 10E-3)
-                    {
-                        delta += Math.Abs(1 - (vector[j] / canonEl));
-                    }
-                    else if (Math.Abs(canonEl - vector[j]) > 10E-2) {
-                        delta += 1;
-                    }
+                    delta += Math.Abs(vector[j] - canonEl) / 10;
                 }
                 if (delta < minDelta)
                 {
@@ -351,7 +338,7 @@ namespace BiometricalIdentify
             this.avg_vector = "";
             for (int i = 0; i < vectors[1].Length; i++) {
                 avg_vector_double.Add(0.0);
-                for (int j = 1; j < vectors.Count; j++) {
+                for (int j = 0; j < vectors.Count; j++) {
                     avg_vector_double[i] += vectors[j][i];
                 }
                 avg_vector_double[i] = avg_vector_double[i] / vectors.Count;

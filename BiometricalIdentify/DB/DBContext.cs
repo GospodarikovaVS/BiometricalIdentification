@@ -43,43 +43,44 @@ namespace BiometricalIdentify
             closeConnection();
             for (int i = 0; i < table.Rows.Count; i++)
             {
-                string user = "";
+                string user = "~~~~~~~~~~~~~~~~~~~~~~~~" + Environment.NewLine;
                 object[] item = table.Rows[i].ItemArray;
-                user += "id:" + Convert.ToString(item[0]) + ";";
-                user += "login:" + item[1].ToString() + ";";
-                user += "password:" + item[2].ToString() + ";";
-                user += "difficulty:" + Convert.ToString(item[3]) + ";";
+                user += "id: " + Convert.ToString(item[0]) + "; " + Environment.NewLine;
+                user += "login: " + item[1].ToString() + "; " + Environment.NewLine;
+                user += "password: " + item[2].ToString() + "; " + Environment.NewLine;
+                user += "difficulty: " + Convert.ToString(item[3]) + "; " + Environment.NewLine;
                 if (item[4] != System.DBNull.Value)
                 {
-                    user += "math_exp:" + Convert.ToString(item[4]) + ";";
+                    user += "math_exp: " + Convert.ToString(item[4]) + "; " + Environment.NewLine;
                 }
                 else {
-                    user += "math_exp: ;";
+                    user += "math_exp: ; " + Environment.NewLine;
                 }
                 if (item[5] != System.DBNull.Value)
                 {
-                    user += "dispersion:" + Convert.ToString(item[5]) + ";";
+                    user += "dispersion: " + Convert.ToString(item[5]) + "; " + Environment.NewLine;
                 }
                 else
                 {
-                    user += "dispersion: ;";
+                    user += "dispersion: ; " + Environment.NewLine;
                 }
                 if (item[6] != System.DBNull.Value)
                 {
-                    user += "avg_speed:" + Convert.ToString(item[6]) + ";";
+                    user += "avg_speed: " + Convert.ToString(item[6]) + "; " + Environment.NewLine;
                 }
                 else
                 {
-                    user += "avg_speed: ;";
+                    user += "avg_speed: ; " + Environment.NewLine;
                 }
                 if (item[7] != System.DBNull.Value)
                 {
-                    user += "avg_vector:" + Convert.ToString(item[7]) + ";";
+                    user += "vector: " + Convert.ToString(item[7]) + Environment.NewLine;
                 }
                 else
                 {
-                    user += "avg_vector: ;";
+                    user += "vector: ;" + Environment.NewLine;
                 }
+                usersList += user + Environment.NewLine;
             }
             return usersList;
         }

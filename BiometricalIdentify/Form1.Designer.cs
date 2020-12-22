@@ -339,6 +339,7 @@
             this.ShowListOfUsers.TabIndex = 8;
             this.ShowListOfUsers.Text = "Show all users";
             this.ShowListOfUsers.UseVisualStyleBackColor = true;
+            this.ShowListOfUsers.Click += new System.EventHandler(this.ShowListOfUsers_Click);
             // 
             // LogInForm
             // 
